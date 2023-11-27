@@ -1,10 +1,4 @@
 #include "main.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-#define ELF_HEADER_SIZE 64
 
 /**
  * display_error - Displays an error message to stderr and exits with a status code.
