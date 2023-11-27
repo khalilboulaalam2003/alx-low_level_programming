@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <string.h>
 
+#define BUFFER_SIZE 1024
 #define ELF_HEADER_SIZE 64
 
 ssize_t read_textfile(const char *filename, size_t letters);
