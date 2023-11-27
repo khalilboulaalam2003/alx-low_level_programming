@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <elf.h>
 
 /* Function declarations */
 
@@ -22,7 +23,6 @@ void print_error_exit(const char *msg);
 void copy_file(const char *src_filename, const char *dest_filename);
 
 /* 100-elf_header.c */
-#include <elf.h>
 void print_elf_header(const Elf64_Ehdr *header);
 
 #endif /* MAIN_H */
