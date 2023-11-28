@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include "main.h"
 
 /**
- * read_textfile - Reads from a file and outputs to standard output.
+ * read_textfile - Read from a file and output to standard output.
  * @filename: The file name.
  * @letters: Number of bytes the function is allowed to write to STDOUT.
- * 
+ *
  * Return: The count of all characters in the file.
  */
 ssize_t read_textfile(const char *filename, ssize_t letters)
@@ -16,15 +17,17 @@ ssize_t read_textfile(const char *filename, ssize_t letters)
     ssize_t write_count, read_count;
     char *BUFFER;
 
-    if (filename == NULL || letters == 0)  // Check if the file doesn't exist or letters is 0.
+    if (filename == NULL || letters == 0) /* File doesn't exist or invalid letters count */
         return (0);
 
-    // Open the file.
+    /* Open the file */
     fp = open(filename, O_RDONLY);
     if (fp == -1)
+    {
         return (0);
+    }
 
-    // Handle allocation.
+    /* Handle allocation */
     BUFFER = malloc(sizeof(char) * letters);
     if (BUFFER == NULL)
     {
@@ -32,7 +35,7 @@ ssize_t read_textfile(const char *filename, ssize_t letters)
         return (0);
     }
 
-    // Read bytes of size letters from the file.
+    /* Read bytes of size letters from the file */
     read_count = read(fp, BUFFER, letters);
     if (read_count == -1)
     {
@@ -40,9 +43,9 @@ ssize_t read_textfile(const char *filename, ssize_t letters)
         return (0);
     }
 
-    // Write the bytes of size letters to STDOUT.
+    /* Write the bytes of size letters to STDOUT */
     write_count = write(1, BUFFER, read_count);
-    if (write_count == -1 || write_count != read_count)
+    if (write_count == -1 || (write_count != read_count))
     {
         free(BUFFER);
         return (0);
