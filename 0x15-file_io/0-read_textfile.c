@@ -1,56 +1,55 @@
-#include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 /**
- * read_textfile - Reads a text file and prints it to the POSIX standard output.
- * @filename: The name of the file to read.
- * @letters: The number of letters to read and print.
- *
- * Return: The actual number of letters read and printed.
- *         If an error occurs, return 0.
+ * read_textfile - Reads from a file and outputs to standard output.
+ * @filename: The file name.
+ * @letters: Number of bytes the function is allowed to write to STDOUT.
+ * 
+ * Return: The count of all characters in the file.
  */
-ssize_t read_textfile(const char *filename, size_t letters)
+ssize_t read_textfile(const char *filename, ssize_t letters)
 {
-    int file_descriptor;
-    ssize_t bytes_read, bytes_written;
-    char *buffer;
+    int fp;
+    ssize_t write_count, read_count;
+    char *BUFFER;
 
-    if (filename == NULL)
-        return 0;
+    if (filename == NULL || letters == 0)  // Check if the file doesn't exist or letters is 0.
+        return (0);
 
-    file_descriptor = open(filename, O_RDONLY);
+    // Open the file.
+    fp = open(filename, O_RDONLY);
+    if (fp == -1)
+        return (0);
 
-    if (file_descriptor == -1)
-        return 0;
-
-    buffer = malloc(sizeof(char) * letters);
-
-    if (buffer == NULL)
+    // Handle allocation.
+    BUFFER = malloc(sizeof(char) * letters);
+    if (BUFFER == NULL)
     {
-        close(file_descriptor);
-        return 0;
+        free(BUFFER);
+        return (0);
     }
 
-    bytes_read = read(file_descriptor, buffer, letters);
-
-    if (bytes_read == -1)
+    // Read bytes of size letters from the file.
+    read_count = read(fp, BUFFER, letters);
+    if (read_count == -1)
     {
-        free(buffer);
-        close(file_descriptor);
-        return 0;
+        free(BUFFER);
+        return (0);
     }
 
-    bytes_written = write(STDOUT_FILENO, buffer, bytes_read);
-
-    if (bytes_written == -1 || bytes_written != bytes_read)
+    // Write the bytes of size letters to STDOUT.
+    write_count = write(1, BUFFER, read_count);
+    if (write_count == -1 || write_count != read_count)
     {
-        free(buffer);
-        close(file_descriptor);
-        return 0;
+        free(BUFFER);
+        return (0);
     }
 
-    free(buffer);
-    close(file_descriptor);
-
-    return bytes_written;
+    free(BUFFER);
+    close(fp);
+    return (write_count);
 }
 
